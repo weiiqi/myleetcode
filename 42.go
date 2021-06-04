@@ -30,6 +30,40 @@ func trap(height []int) int {
 	return ret
 }
 
+/*
+思路二：学习国际站的大佬写法
+计算面积的方式不再是 area = wide * length
+修改为累计的方式(宽度固定为1)， 只要确定左右两个最高的柱子，那么中间的值就是柱子减去柱子高度，累加起来就是阴影部分的面积
+难思考，但是是个好的方式。
+时间复杂度: O(n)
+空间复杂度: O(1)
+*/
+
+func trap_2(height []int) int {
+	left, right := 0, len(height)-1
+	maxleft, maxright := 0, 0
+	ret := 0
+	for left < right {
+		if height[left] < height[right] {
+			if height[left] > maxleft {
+				maxleft = height[left]
+			} else {
+				ret += maxleft - height[left]
+			}
+			left++
+		} else {
+			if height[right] > maxright {
+				maxright = height[right]
+			} else {
+				ret += maxright - height[right]
+			}
+			right--
+		}
+
+	}
+	return ret
+}
+
 func min(a, b int) int {
 	if a < b {
 		return a
@@ -39,5 +73,5 @@ func min(a, b int) int {
 
 func main() {
 	nums := []int{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}
-	fmt.Print(trap(nums))
+	fmt.Print(trap_2(nums))
 }
